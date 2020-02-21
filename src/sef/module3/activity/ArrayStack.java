@@ -149,6 +149,9 @@ public class ArrayStack {
     public Object pop() {
         Object temp;
 
+        if (count==0) {
+            return null;
+        }
         temp = peek();
 
         Object[] stash = new Object[stack.length - 1];
@@ -162,6 +165,7 @@ public class ArrayStack {
 
         System.arraycopy(stash, 0, stack, 0, stash.length);
 
+        count--;
 
         return temp;
     }
