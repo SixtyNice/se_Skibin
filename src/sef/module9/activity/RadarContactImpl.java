@@ -21,11 +21,30 @@ public class RadarContactImpl implements RadarContact {
      */
     public RadarContactImpl(String contactID, double bearing, double distance) {
         this.contactID = contactID;
-        this.bearing = bearing;
-        this.distance = distance;
+        if (bearing > 359.99 || bearing < 0) {
+            this.bearing = bearingCalc(bearing);
+            if (this.bearing < 0) {
+                this.bearing += 360;
+            }
+        } else {
+            this.bearing = bearing;
+        }
+        if (distance < 0) {
+            this.distance = 0;
+        } else {
+            this.distance = distance;
+        }
 
     }
 
+    public static double roundAvoid(double value, int places) {
+        double scale = Math.pow(10, places);
+        return Math.round(value * scale) / scale;
+    }
+
+    private static double bearingCalc(double bearing) {
+        return roundAvoid((bearing - 360 * Math.round(bearing / 360)), 1);
+    }
 
     /* (non-Javadoc)
      * @see sef.module8.activity.RadarContact#getBearing()
@@ -40,8 +59,12 @@ public class RadarContactImpl implements RadarContact {
      * @see sef.module8.activity.RadarContact#setBearing(double)
      */
     public final void setBearing(double bearing) {
-        this.bearing = bearing;
 
+        if (bearing > 359.99 || bearing < 0) {
+            this.bearing = roundAvoid((bearing - 360 * Math.round(bearing / 360)), 1);
+        } else {
+            this.bearing = bearing;
+        }
     }
 
     /* (non-Javadoc)
@@ -56,7 +79,11 @@ public class RadarContactImpl implements RadarContact {
      * @see sef.module8.activity.RadarContact#setDistance(double)
      */
     public final void setDistance(double distance) {
-        this.distance = distance;
+        if (distance < 0) {
+            this.distance = 0;
+        } else {
+            this.distance = distance;
+        }
     }
 
     /* (non-Javadoc)
