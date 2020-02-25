@@ -61,7 +61,10 @@ public class RadarContactImpl implements RadarContact {
     public final void setBearing(double bearing) {
 
         if (bearing > 359.99 || bearing < 0) {
-            this.bearing = roundAvoid((bearing - 360 * Math.round(bearing / 360)), 1);
+            this.bearing = bearingCalc(bearing);
+            if (this.bearing < 0) {
+                this.bearing += 360;
+            }
         } else {
             this.bearing = bearing;
         }
